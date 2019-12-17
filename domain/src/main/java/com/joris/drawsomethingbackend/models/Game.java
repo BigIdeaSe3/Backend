@@ -12,6 +12,7 @@ public class Game {
     private List<Tuple<String, List<Location>>> locations = new ArrayList<>();
     @Setter
     private String currentColor = "#000000";
+    @Setter
     private String subject;
     @Getter
     @Setter
@@ -26,8 +27,10 @@ public class Game {
     }
 
     public List<Player> addPlayer(Player player) {
-        connectedPlayers.add(player);
-        return connectedPlayers;
+        if (!connectedPlayers.contains(player)) {
+            connectedPlayers.add(player);
+            return connectedPlayers;
+        } else return null;
     }
 
     public List<Player> removePlayer(Player player) {
@@ -45,8 +48,11 @@ public class Game {
     }
 
     public Location addPoint(Location location) {
-        this.locations.get(locations.size()-1).y.add(location);
-        return location;
+        if (locations.size() > 0) {
+            this.locations.get(locations.size()-1).y.add(location);
+            return location;
+        } else
+            return null;
     }
 
     public void clearDrawing() {

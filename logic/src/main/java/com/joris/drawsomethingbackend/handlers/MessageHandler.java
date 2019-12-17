@@ -36,9 +36,10 @@ public class MessageHandler {
     public WebsocketLobbyMessage handleLobbyMessage(WebsocketLobbyMessage msg) {
         switch (msg.getType()) {
             case CREATE:
+                System.out.println("Create lobby");
                 Player player = playerService.getPlayerByUserName(msg.getMessage().toString());
                 int id = gameService.createGame(player);
-                return new WebsocketLobbyMessage(LobbyMessageType.CREATE,id);
+                return new WebsocketLobbyMessage(LobbyMessageType.CREATE,gameService.getGames());
             case CONNECT:
                 return new WebsocketLobbyMessage(LobbyMessageType.CONNECT, gameService.getGames());
         }
@@ -50,8 +51,8 @@ public class MessageHandler {
         switch (msg.getType()) {
             case DRAW:
                 Location location = new Gson().fromJson(msg.getMessage().toString(),Location.class);
-                game.addPoint(location);
-                return msg;
+                System.out.println(msg.getMessage());
+                return new WebsocketGameMessage(msg.getType(),game.addPoint(location));
             case STOPDRAWING:
                 game.stopDrawing();
                 return msg;
@@ -81,7 +82,8 @@ public class MessageHandler {
                 game.setThickness(Integer.getInteger(msg.getMessage().toString()));
                 return msg;
             case SETSUBJECT:
-                return msg;
+                game.setSubject(msg.getMessage().toString());
+                return new WebsocketGameMessage(GameMessageType.SETSUBJECT,null);
         }
         throw new UnsupportedOperationException();
     }
