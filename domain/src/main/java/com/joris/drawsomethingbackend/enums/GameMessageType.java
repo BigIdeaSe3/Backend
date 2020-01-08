@@ -10,6 +10,8 @@ public enum GameMessageType {
     CLEAR,
     LEAVE,
     JOIN,
+    GETSUBJECTS,
     SETSUBJECT,
-    SETTHICKNESS
+    SETTHICKNESS,
+    GETALLPLAYERS
 }

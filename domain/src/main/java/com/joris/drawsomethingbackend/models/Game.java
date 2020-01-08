@@ -3,6 +3,7 @@ package com.joris.drawsomethingbackend.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.nio.channels.AlreadyConnectedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class Game {
 
     public Game(Player player) {
         this.connectedPlayers.add(player);
+        this.locations.add(new Tuple<>(currentColor,new ArrayList<>()));
+    }
+
+    public Game() {
         this.locations.add(new Tuple<>(currentColor,new ArrayList<>()));
     }
 
