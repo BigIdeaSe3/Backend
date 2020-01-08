@@ -1,0 +1,6 @@
+projectKey=BigIdeaSe3
+serverUrl=http://localhost:9090
+serverVersion=8.1.0.31237
+dashboardUrl=http://localhost:9090/dashboard?id=BigIdeaSe3
+ceTaskId=AW-EssfWF4WxnmOM8vhs
+ceTaskUrl=http://localhost:9090/api/ce/task?id=AW-EssfWF4WxnmOM8vhs
