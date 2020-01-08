@@ -11,20 +11,25 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: SonarQubePrepare@4
-  inputs:
-    SonarQube: 'SonarQube'
-    scannerMode: 'Other'
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'compile'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: true
-    sqMavenPluginVersionChoice: 'latest'
+    - task: SonarQubePrepare@4
+      inputs:
+        SonarQube: 'SonarQube'
+        scannerMode: 'Other'
+
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'compile'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: true
+        sqMavenPluginVersionChoice: 'latest'
+
+    - task: SonarQubePublish@4
+      inputs:
+        pollingTimeoutSec: '300'
