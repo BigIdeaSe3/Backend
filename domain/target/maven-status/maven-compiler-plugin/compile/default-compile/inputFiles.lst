@@ -1,0 +1,10 @@
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\interfaces\CRUD.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\enums\LobbyMessageType.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\interfaces\RESTCRUD.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\models\WebsocketLobbyMessage.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\models\Game.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\models\Location.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\models\Tuple.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\enums\GameMessageType.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\models\Player.java
+D:\Programming\Java\drawsomething\domain\src\main\java\com\joris\drawsomethingbackend\models\WebsocketGameMessage.java

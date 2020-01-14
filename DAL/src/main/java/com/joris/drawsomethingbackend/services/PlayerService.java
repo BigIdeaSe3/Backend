@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayerService implements CRUD<Player,Long> {
@@ -31,7 +32,8 @@ public class PlayerService implements CRUD<Player,Long> {
 
     @Override
     public Player read(Long id) {
-        return repository.findById(id).get();
+        Optional<Player> optional = repository.findById(id);
+        return optional.orElse(null);
     }
 
     @Override

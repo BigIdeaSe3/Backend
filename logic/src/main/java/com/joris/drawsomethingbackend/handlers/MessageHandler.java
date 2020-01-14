@@ -1,9 +1,13 @@
 package com.joris.drawsomethingbackend.handlers;
 
 import com.google.gson.Gson;
+import com.joris.drawsomethingbackend.commands.*;
 import com.joris.drawsomethingbackend.components.GameComponent;
+import com.joris.drawsomethingbackend.controllers.GameController;
 import com.joris.drawsomethingbackend.enums.GameMessageType;
 import com.joris.drawsomethingbackend.enums.LobbyMessageType;
+import com.joris.drawsomethingbackend.interfaces.Command;
+import com.joris.drawsomethingbackend.interfaces.DTO;
 import com.joris.drawsomethingbackend.models.*;
 import com.joris.drawsomethingbackend.services.GameService;
 import com.joris.drawsomethingbackend.services.PlayerService;
@@ -11,14 +15,17 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
 @Component
-public class MessageHandler {
+public class MessageHandler implements com.joris.drawsomethingbackend.interfaces.MessageHandler {
 
-    private List<String> subjects = Arrays.asList("Appel","Peer", "Banaan", "Kaas", "Kapsalon");
+
+    private final HashMap<GameMessageType, Command> commandHashMap = new HashMap<>();
+    private DTO dto;
+    private Gson gson = new Gson();
+    private GameController game;
 
     private Instant time;
 
@@ -33,7 +40,10 @@ public class MessageHandler {
     @Setter
     private PlayerService playerService;
 
+
+
     public MessageHandler() {
+        registerCommands();
     }
 
     @Autowired
@@ -41,7 +51,25 @@ public class MessageHandler {
         this.gameService = gameService;
         this.component = component;
         this.playerService = playerService;
+        registerCommands();
     }
+
+    private void registerCommands(){
+        register(GameMessageType.STARTDRAWING, new StartDrawing(game));
+        register(GameMessageType.DRAW,new AddPoint(game));
+        register(GameMessageType.STOPDRAWING, new StopDrawing(game));
+        register(GameMessageType.JOIN,new JoinGame(game));
+        register(GameMessageType.GETALLPLAYERS, new GetAllPlayers(game));
+        register(GameMessageType.CLEAR, new ClearDrawing(game));
+        register(GameMessageType.LEAVE, new LeaveGame(game));
+        register(GameMessageType.CHANGECOLOR, new SetColor(game));
+        register(GameMessageType.SETTHICKNESS, new SetThickness(game));
+        register(GameMessageType.SETSUBJECT, new SetSubject(game));
+        register(GameMessageType.GETSUBJECTS, new GetSubjects(game));
+        register(GameMessageType.GUESS, new GuessSubject(game));
+        register(GameMessageType.STARTGAME, new StartGame(game));
+    }
+
 
     public WebsocketLobbyMessage handleLobbyMessage(WebsocketLobbyMessage msg) {
         switch (msg.getType()) {
@@ -55,67 +83,56 @@ public class MessageHandler {
         throw new UnsupportedOperationException();
     }
 
-    public WebsocketGameMessage handleGameMessage(int gameId, WebsocketGameMessage msg) {
-        Game game = gameService.getGame(gameId);
-        switch (msg.getType()) {
+    public void register(GameMessageType commandName, Command command) {
+        commandHashMap.put(commandName,command);
+    }
+
+
+    @Override
+    public WebsocketGameMessage execute(WebsocketGameMessage message, Integer id) {
+        GameMessageType commandName = message.getType();
+        Command cmd = commandHashMap.get(commandName);
+        if (cmd == null) throw new IllegalStateException("No command registered for " + commandName);
+        dto = deserializeDTO(message.getType(), message.getMessage().toString());
+        return new WebsocketGameMessage(message.getType(),cmd.execute(gameService.getGame(id), dto));
+    }
+
+    public DTO deserializeDTO(GameMessageType type, String dtoMessage) {
+
+        switch (type) {
             case DRAW:
-                counter-=-1;
-                Location location = new Gson().fromJson(msg.getMessage().toString(),Location.class);
-                System.out.println(msg.getMessage());
-                return new WebsocketGameMessage(msg.getType(),game.addPoint(location));
-            case STOPDRAWING:
-                Instant now = Instant.now();
-
-                Duration diff = Duration.between(time,now);
-
-                System.out.println("Took " + diff.toMillis() + " ms, in that time there were " + counter + " draw calls");
-
-
-                counter = 0;
-                game.stopDrawing();
-                return msg;
-            case GUESS:
-                return new WebsocketGameMessage(GameMessageType.GUESS,game.guessSubject(msg.getMessage().toString()));
-            case LEAVE:
-                Player player = playerService.getPlayerByUserName(msg.getMessage().toString());
-                return new WebsocketGameMessage(GameMessageType.LEAVE, game.removePlayer(player));
             case STARTDRAWING:
-                time = Instant.now();
-
-                location = new Gson().fromJson(msg.getMessage().toString(),Location.class);
-                game.startDrawing(location);
-                return msg;
-            case STARTGAME:
-                player = playerService.getPlayerByUserName(msg.getMessage().toString());
-                return new WebsocketGameMessage(GameMessageType.STARTGAME,component.startGame(game,player));
-            case CLEAR:
-                game.clearDrawing();
-                return msg;
-            case CHANGECOLOR:
-                String color = msg.getMessage().toString();
-                game.setCurrentColor(color);
-                return msg;
+                return gson.fromJson(dtoMessage, Location.class);
             case JOIN:
-                player = playerService.getPlayerByUserName(msg.getMessage().toString());
-                List<Player> players = game.addPlayer(player);
-                System.out.println(gameId);
-                if (players == null) {
-                    return new WebsocketGameMessage(GameMessageType.JOIN, "null");
-                } else {
-                    return new WebsocketGameMessage(GameMessageType.JOIN, players);
-                }
-            case SETTHICKNESS:
-                game.setThickness(Integer.getInteger(msg.getMessage().toString()));
-                return msg;
-            case GETSUBJECTS:
-                Collections.shuffle(subjects);
-                return new WebsocketGameMessage(GameMessageType.GETSUBJECTS, subjects.subList(0,3));
-            case SETSUBJECT:
-                game.setSubject(msg.getMessage().toString());
-                return new WebsocketGameMessage(GameMessageType.SETSUBJECT,null);
+            case LEAVE:
+                return playerService.getPlayerByUserName(dtoMessage);
             case GETALLPLAYERS:
-                return new WebsocketGameMessage(GameMessageType.GETALLPLAYERS, game.getConnectedPlayers());
+            case STOPDRAWING:
+            case CLEAR:
+            case STARTGAME:
+                return null;
+            case CHANGECOLOR:
+                return gson.fromJson(dtoMessage, Color.class);
+            case SETTHICKNESS:
+                return gson.fromJson(dtoMessage, Thickness.class);
+            case SETSUBJECT:
+            case GUESS:
+                return gson.fromJson(dtoMessage, Subject.class);
+
         }
-        throw new UnsupportedOperationException();
+
+        /*switch (type) {
+            case ATTACK:
+                break;
+            case ITEM:
+                break;
+            case MAP:
+                break;
+            case PLAYER:
+                return gson.fromJson(dtoMessage, PlayerDTOMessage.class);
+            case POKEMON:
+                break;
+        }*/
+        return null;
     }
 }

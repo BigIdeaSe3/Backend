@@ -1,26 +1,23 @@
 package com.joris.drawsomethingbackend.models;
 
+import com.joris.drawsomethingbackend.interfaces.DTO;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.nio.channels.AlreadyConnectedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class Game {
-    @Getter
+@Data
+public class Game implements DTO {
     private List<Player> connectedPlayers = new ArrayList<>();
-    private List<Tuple<String, List<Location>>> locations = new ArrayList<>();
-    @Setter
-    private String currentColor = "#000000";
-    @Setter
-    private String subject;
-    @Getter
-    @Setter
+    private List<Tuple<Color, List<Location>>> locations = new ArrayList<>();
+    private Color currentColor = new Color("#000000");
+    private Subject subject;
     private Player drawer;
-    @Getter
-    @Setter
-    private Integer thickness;
+    private Thickness thickness;
 
     public Game(Player player) {
         this.connectedPlayers.add(player);
@@ -64,7 +61,9 @@ public class Game {
         this.locations.clear();
     }
 
-    public boolean guessSubject(String guess) {
-        return guess.equals(subject);
+    public Player startGame() {
+        Player p = connectedPlayers.get(new Random().nextInt(connectedPlayers.size()));
+        setDrawer(p);
+        return p;
     }
 }
