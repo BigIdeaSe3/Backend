@@ -1,11 +1,12 @@
 package com.joris.drawsomethingbackend.models;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
 public class Randomizer implements Callable<List<Subject>> {
-    Random r = new Random();
+    SecureRandom r = new SecureRandom();
      private List<Subject> subjects;
 
 

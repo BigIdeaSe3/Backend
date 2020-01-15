@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.nio.channels.AlreadyConnectedException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +65,7 @@ public class Game implements DTO {
     }
 
     public Player startGame() {
-        Player p = connectedPlayers.get(new Random().nextInt(connectedPlayers.size()));
+        Player p = connectedPlayers.get(new SecureRandom().nextInt(connectedPlayers.size()));
         setDrawer(p);
         return p;
     }

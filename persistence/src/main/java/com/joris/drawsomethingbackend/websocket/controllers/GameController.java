@@ -25,7 +25,6 @@ public class GameController {
     @MessageMapping("/game/{lobbyId}")
     @SendTo("/topic/game/{lobbyId}")
     public WebsocketGameMessage handleMessage(@DestinationVariable("lobbyId") Integer lobbyId, WebsocketGameMessage msg) {
-        //return handler.handleGameMessage(lobbyId, msg);
         return handler.execute(msg, lobbyId);
     }
 

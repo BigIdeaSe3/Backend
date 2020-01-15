@@ -2,7 +2,6 @@ package com.joris.drawsomethingbackend.handlers;
 
 import com.google.gson.Gson;
 import com.joris.drawsomethingbackend.commands.*;
-import com.joris.drawsomethingbackend.controllers.GameController;
 import com.joris.drawsomethingbackend.enums.GameMessageType;
 import com.joris.drawsomethingbackend.enums.LobbyMessageType;
 import com.joris.drawsomethingbackend.interfaces.Command;
@@ -14,14 +13,14 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
 
 @Component
 public class WebsocketMessageHandler implements com.joris.drawsomethingbackend.interfaces.MessageHandler {
 
 
-    private final HashMap<GameMessageType, Command> commandHashMap = new HashMap<>();
+    private final EnumMap<GameMessageType, Command> commandHashMap = new EnumMap<GameMessageType,Command>(GameMessageType.class);
     private Gson gson = new Gson();
 
     @Setter
@@ -95,13 +94,7 @@ public class WebsocketMessageHandler implements com.joris.drawsomethingbackend.i
             case JOIN:
             case LEAVE:
                 return playerService.getPlayerByUserName(dtoMessage);
-            case GETALLPLAYERS:
-            case STOPDRAWING:
-            case CLEAR:
-            case STARTGAME:
-            case GETSUBJECTS:
-            default:
-                return null;
+
             case CHANGECOLOR:
                 return gson.fromJson(dtoMessage, Color.class);
             case SETTHICKNESS:
@@ -109,6 +102,13 @@ public class WebsocketMessageHandler implements com.joris.drawsomethingbackend.i
             case SETSUBJECT:
             case GUESS:
                 return gson.fromJson(dtoMessage, Subject.class);
+            case GETALLPLAYERS:
+            case STOPDRAWING:
+            case CLEAR:
+            case STARTGAME:
+            case GETSUBJECTS:
+            default:
+                return null;
         }
     }
 }
