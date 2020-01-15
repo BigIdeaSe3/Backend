@@ -4,23 +4,23 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
-public class Randomizer implements Callable<List<String>> {
+public class Randomizer implements Callable<List<Subject>> {
 
-    private List<String> subjects;
+    private List<Subject> subjects;
 
 
-    public Randomizer(List<String> array) {
+    public Randomizer(List<Subject> array) {
         subjects = array;
     }
 
     //Knuth shuffle algorithm
-    public List<String> randomize(List<String> arr) {
+    public List<Subject> randomize(List<Subject> arr) {
         Random r = new Random();
 
         for (int i = arr.size()-1; i > 0; i--) {
             int j = r.nextInt(i);
 
-            String tmp = arr.get(i);
+            Subject tmp = arr.get(i);
             arr.set(i, arr.get(j));
             arr.set(j, tmp);
         }
@@ -29,7 +29,7 @@ public class Randomizer implements Callable<List<String>> {
     }
 
     @Override
-    public List<String> call() throws Exception {
+    public List<Subject> call() throws Exception {
         return randomize(subjects);
     }
 }

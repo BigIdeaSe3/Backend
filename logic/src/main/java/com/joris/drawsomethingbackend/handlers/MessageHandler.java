@@ -2,7 +2,6 @@ package com.joris.drawsomethingbackend.handlers;
 
 import com.google.gson.Gson;
 import com.joris.drawsomethingbackend.commands.*;
-import com.joris.drawsomethingbackend.components.GameComponent;
 import com.joris.drawsomethingbackend.controllers.GameController;
 import com.joris.drawsomethingbackend.enums.GameMessageType;
 import com.joris.drawsomethingbackend.enums.LobbyMessageType;
@@ -35,9 +34,6 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
     private GameService gameService;
 
     @Setter
-    private GameComponent component;
-
-    @Setter
     private PlayerService playerService;
 
 
@@ -47,9 +43,8 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
     }
 
     @Autowired
-    public MessageHandler(GameService gameService, GameComponent component, PlayerService playerService) {
+    public MessageHandler(GameService gameService, PlayerService playerService) {
         this.gameService = gameService;
-        this.component = component;
         this.playerService = playerService;
         registerCommands();
     }
@@ -120,19 +115,6 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
                 return gson.fromJson(dtoMessage, Subject.class);
 
         }
-
-        /*switch (type) {
-            case ATTACK:
-                break;
-            case ITEM:
-                break;
-            case MAP:
-                break;
-            case PLAYER:
-                return gson.fromJson(dtoMessage, PlayerDTOMessage.class);
-            case POKEMON:
-                break;
-        }*/
         return null;
     }
 }

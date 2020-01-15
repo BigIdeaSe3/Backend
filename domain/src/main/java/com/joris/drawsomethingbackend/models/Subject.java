@@ -9,7 +9,7 @@ import lombok.Data;
 public class Subject implements DTO {
     private String subject;
 
-    public boolean compare(Subject guess) {
+    public boolean guess(Subject guess) {
         return this.subject.equals(guess.getSubject());
     }
 }

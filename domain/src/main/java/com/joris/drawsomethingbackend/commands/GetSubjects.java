@@ -6,6 +6,7 @@ import com.joris.drawsomethingbackend.interfaces.Controller;
 import com.joris.drawsomethingbackend.interfaces.DTO;
 import com.joris.drawsomethingbackend.models.Game;
 import com.joris.drawsomethingbackend.models.Randomizer;
+import com.joris.drawsomethingbackend.models.Subject;
 import com.joris.drawsomethingbackend.models.WebsocketGameMessage;
 
 import java.util.Arrays;
@@ -18,7 +19,6 @@ import java.util.concurrent.Future;
 public class GetSubjects implements Command {
     private Controller controller;
 
-    private List<String> subjects = Arrays.asList("Appel","Peer", "Banaan", "Kaas", "Kapsalon");
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     Future<List<String>> future;
 
@@ -28,12 +28,12 @@ public class GetSubjects implements Command {
 
 
     @Override
-    public Object execute(Game game, DTO message) {
+    public List<Subject> execute(Game game, DTO message) {
         try {
-            subjects = executorService.submit(new Randomizer(subjects)).get();
+            game.setSubjects(executorService.submit(new Randomizer(game.getSubjects())).get());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return subjects.subList(0,3);
+        return game.getSubjects().subList(0,3);
     }
 }

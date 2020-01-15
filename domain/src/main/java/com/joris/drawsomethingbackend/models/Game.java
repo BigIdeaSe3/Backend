@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.nio.channels.AlreadyConnectedException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ public class Game implements DTO {
     private List<Tuple<Color, List<Location>>> locations = new ArrayList<>();
     private Color currentColor = new Color("#000000");
     private Subject subject;
+    private List<Subject> subjects = Arrays.asList(new Subject("Appel"), new Subject("Peer"), new Subject("Banaan"), new Subject("Kapsalon"), new Subject("Kapsalon"));
     private Player drawer;
     private Thickness thickness;
 

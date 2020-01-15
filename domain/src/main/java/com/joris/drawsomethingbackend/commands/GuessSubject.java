@@ -16,6 +16,6 @@ public class GuessSubject implements Command {
 
     @Override
     public Boolean execute(Game game, DTO message) {
-        return game.getSubject().compare((Subject)message);
+        return game.getSubject().guess((Subject)message);
     }
 }
