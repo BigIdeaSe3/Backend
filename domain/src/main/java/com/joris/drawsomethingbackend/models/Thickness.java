@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Thickness implements DTO {
-    private Integer thickness;
+    private Integer dikte;
 }

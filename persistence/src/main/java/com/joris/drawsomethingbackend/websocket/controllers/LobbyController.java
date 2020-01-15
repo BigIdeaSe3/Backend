@@ -1,6 +1,6 @@
 package com.joris.drawsomethingbackend.websocket.controllers;
 
-import com.joris.drawsomethingbackend.handlers.MessageHandler;
+import com.joris.drawsomethingbackend.handlers.WebsocketMessageHandler;
 import com.joris.drawsomethingbackend.models.WebsocketLobbyMessage;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Controller;
 public class LobbyController {
 
     @Setter
-    private final MessageHandler handler;
+    private final WebsocketMessageHandler handler;
 
     @Autowired
-    public LobbyController(MessageHandler handler) {
+    public LobbyController(WebsocketMessageHandler handler) {
         this.handler = handler;
     }
 

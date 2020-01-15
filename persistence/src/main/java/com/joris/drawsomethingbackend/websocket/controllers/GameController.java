@@ -1,6 +1,6 @@
 package com.joris.drawsomethingbackend.websocket.controllers;
 
-import com.joris.drawsomethingbackend.handlers.MessageHandler;
+import com.joris.drawsomethingbackend.handlers.WebsocketMessageHandler;
 import com.joris.drawsomethingbackend.models.WebsocketGameMessage;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Controller;
 public class GameController {
 
     @Setter
-    private MessageHandler handler;
+    private WebsocketMessageHandler handler;
 
     @Autowired
-    public GameController(MessageHandler handler) {
+    public GameController(WebsocketMessageHandler handler) {
         this.handler = handler;
     }
 

@@ -18,17 +18,11 @@ import java.time.Instant;
 import java.util.*;
 
 @Component
-public class MessageHandler implements com.joris.drawsomethingbackend.interfaces.MessageHandler {
+public class WebsocketMessageHandler implements com.joris.drawsomethingbackend.interfaces.MessageHandler {
 
 
     private final HashMap<GameMessageType, Command> commandHashMap = new HashMap<>();
-    private DTO dto;
     private Gson gson = new Gson();
-    private GameController game;
-
-    private Instant time;
-
-    private int counter = 0;
 
     @Setter
     private GameService gameService;
@@ -38,31 +32,31 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
 
 
 
-    public MessageHandler() {
+    public WebsocketMessageHandler() {
         registerCommands();
     }
 
     @Autowired
-    public MessageHandler(GameService gameService, PlayerService playerService) {
+    public WebsocketMessageHandler(GameService gameService, PlayerService playerService) {
         this.gameService = gameService;
         this.playerService = playerService;
         registerCommands();
     }
 
     private void registerCommands(){
-        register(GameMessageType.STARTDRAWING, new StartDrawing(game));
-        register(GameMessageType.DRAW,new AddPoint(game));
-        register(GameMessageType.STOPDRAWING, new StopDrawing(game));
-        register(GameMessageType.JOIN,new JoinGame(game));
-        register(GameMessageType.GETALLPLAYERS, new GetAllPlayers(game));
-        register(GameMessageType.CLEAR, new ClearDrawing(game));
-        register(GameMessageType.LEAVE, new LeaveGame(game));
-        register(GameMessageType.CHANGECOLOR, new SetColor(game));
-        register(GameMessageType.SETTHICKNESS, new SetThickness(game));
-        register(GameMessageType.SETSUBJECT, new SetSubject(game));
-        register(GameMessageType.GETSUBJECTS, new GetSubjects(game));
-        register(GameMessageType.GUESS, new GuessSubject(game));
-        register(GameMessageType.STARTGAME, new StartGame(game));
+        register(GameMessageType.STARTDRAWING, new StartDrawing());
+        register(GameMessageType.DRAW,new AddPoint());
+        register(GameMessageType.STOPDRAWING, new StopDrawing());
+        register(GameMessageType.JOIN,new JoinGame());
+        register(GameMessageType.GETALLPLAYERS, new GetAllPlayers());
+        register(GameMessageType.CLEAR, new ClearDrawing());
+        register(GameMessageType.LEAVE, new LeaveGame());
+        register(GameMessageType.CHANGECOLOR, new SetColor());
+        register(GameMessageType.SETTHICKNESS, new SetThickness());
+        register(GameMessageType.SETSUBJECT, new SetSubject());
+        register(GameMessageType.GETSUBJECTS, new GetSubjects());
+        register(GameMessageType.GUESS, new GuessSubject());
+        register(GameMessageType.STARTGAME, new StartGame());
     }
 
 
@@ -88,7 +82,7 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
         GameMessageType commandName = message.getType();
         Command cmd = commandHashMap.get(commandName);
         if (cmd == null) throw new IllegalStateException("No command registered for " + commandName);
-        dto = deserializeDTO(message.getType(), message.getMessage().toString());
+        DTO dto = deserializeDTO(message.getType(), message.getMessage().toString());
         return new WebsocketGameMessage(message.getType(),cmd.execute(gameService.getGame(id), dto));
     }
 
@@ -105,6 +99,8 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
             case STOPDRAWING:
             case CLEAR:
             case STARTGAME:
+            case GETSUBJECTS:
+            default:
                 return null;
             case CHANGECOLOR:
                 return gson.fromJson(dtoMessage, Color.class);
@@ -113,8 +109,6 @@ public class MessageHandler implements com.joris.drawsomethingbackend.interfaces
             case SETSUBJECT:
             case GUESS:
                 return gson.fromJson(dtoMessage, Subject.class);
-
         }
-        return null;
     }
 }

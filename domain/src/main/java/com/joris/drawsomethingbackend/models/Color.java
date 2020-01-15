@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Color implements DTO {
-    private String color;
+    private String kleur;
 
 }

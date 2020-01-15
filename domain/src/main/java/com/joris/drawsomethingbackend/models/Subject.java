@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Subject implements DTO {
-    private String subject;
+    private String onderwerp;
 
     public boolean guess(Subject guess) {
-        return this.subject.equals(guess.getSubject());
+        return this.onderwerp.equals(guess.getOnderwerp());
     }
 }

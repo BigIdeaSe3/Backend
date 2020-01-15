@@ -14,7 +14,7 @@ import java.util.List;
 public class CommandsTest {
 
     private Game game = new Game();
-    StartGame command = new StartGame(new GameController());
+    StartGame command = new StartGame();
 
     @BeforeEach
     public void setup(){
@@ -97,7 +97,7 @@ public class CommandsTest {
 
     @Test
     public void get3Subjects() {
-        GetSubjects command = new GetSubjects(new GameController());
+        GetSubjects command = new GetSubjects();
         List<Subject> subjects = command.execute(game,null);
         Assertions.assertEquals(3, subjects.size());
     }
@@ -105,7 +105,7 @@ public class CommandsTest {
 
     @Test
     public void getRandomSubjects() {
-        GetSubjects command = new GetSubjects(new GameController());
+        GetSubjects command = new GetSubjects();
         List<Subject> subjects = new ArrayList<>(command.execute(game,null));
         Assertions.assertNotEquals(subjects, command.execute(game,null));
     }
