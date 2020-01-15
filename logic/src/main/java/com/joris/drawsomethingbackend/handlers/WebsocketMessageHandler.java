@@ -14,13 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 
 @Component
 public class WebsocketMessageHandler implements com.joris.drawsomethingbackend.interfaces.MessageHandler {
 
 
-    private final EnumMap<GameMessageType, Command> commandHashMap = new EnumMap<GameMessageType,Command>(GameMessageType.class);
+    private final EnumMap<GameMessageType, Command> commandHashMap = new EnumMap<>(GameMessageType.class);
     private Gson gson = new Gson();
 
     @Setter

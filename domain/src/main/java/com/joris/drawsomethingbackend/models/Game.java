@@ -2,15 +2,11 @@ package com.joris.drawsomethingbackend.models;
 
 import com.joris.drawsomethingbackend.interfaces.DTO;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.nio.channels.AlreadyConnectedException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Data
 public class Game implements DTO {
