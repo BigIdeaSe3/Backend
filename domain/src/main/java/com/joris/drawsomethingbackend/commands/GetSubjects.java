@@ -10,6 +10,7 @@ import com.joris.drawsomethingbackend.models.WebsocketGameMessage;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -28,17 +29,11 @@ public class GetSubjects implements Command {
 
     @Override
     public Object execute(Game game, DTO message) {
-        new Randomizer(subjects);
+        try {
+            subjects = executorService.submit(new Randomizer(subjects)).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return subjects.subList(0,3);
-//        try {
-//            if (future != null) {
-//                subjects = future.get();
-//                executorService.shutdown();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        future = executorService.submit(new Randomizer(subjects));
-//        return new WebsocketGameMessage(GameMessageType.GETSUBJECTS, subjects.subList(0,3));
     }
 }
