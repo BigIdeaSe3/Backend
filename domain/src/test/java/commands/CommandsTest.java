@@ -2,7 +2,6 @@ package commands;
 
 import com.joris.drawsomethingbackend.commands.GetSubjects;
 import com.joris.drawsomethingbackend.commands.StartGame;
-import com.joris.drawsomethingbackend.controllers.GameController;
 import com.joris.drawsomethingbackend.models.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

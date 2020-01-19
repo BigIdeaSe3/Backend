@@ -14,7 +14,7 @@ public class Game implements DTO {
     private List<Tuple<Color, List<Location>>> locations = new ArrayList<>();
     private Color currentColor = new Color("#000000");
     private Subject subject;
-    private List<Subject> subjects = Arrays.asList(new Subject("Appel"), new Subject("Peer"), new Subject("Banaan"), new Subject("Kapsalon"), new Subject("Kapsalon"));
+    private List<Subject> subjects = Arrays.asList(new Subject("appel"), new Subject("peer"), new Subject("banaan"), new Subject("kapsalon"), new Subject("kaas"), new Subject("runescape"), new Subject("zon"), new Subject("goudvis"), new Subject("xi"),new Subject("das"),new Subject("jas"), new Subject("vis"));
     private Player drawer;
     private Thickness thickness;
 
