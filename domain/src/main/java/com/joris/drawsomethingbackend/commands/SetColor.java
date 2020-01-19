@@ -10,6 +10,6 @@ public class SetColor implements Command {
     @Override
     public Object execute(Game game, DTO message) {
         game.setCurrentColor((Color) message);
-        return null;
+        return message;
     }
 }

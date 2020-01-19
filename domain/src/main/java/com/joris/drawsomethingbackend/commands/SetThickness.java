@@ -10,6 +10,6 @@ public class SetThickness implements Command {
     @Override
     public Object execute(Game game, DTO message) {
         game.setThickness((Thickness) message);
-        return null;
+        return message;
     }
 }
